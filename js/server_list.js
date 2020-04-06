@@ -9,7 +9,7 @@ discord_manager.server_list = function (page) {
     // Create Page
     $('#app_base').empty().append(
 
-        $("<h3>").text('Server List'),
+        $("<h3>", {class: "text-center"}).text('Server List'),
 
         $('<div>', { class: "table-responsive my-3" }).append(
             $("<table>", { class: "table table-striped m-0" }).append(
@@ -74,8 +74,7 @@ discord_manager.server_list = function (page) {
 
                         )
                     );
-
-                    console.log(items[i]);
+                    
                 }
             }
 

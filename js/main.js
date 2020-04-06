@@ -85,6 +85,13 @@ const startSystem = function () {
         console.warn(erMsg);
     });
 
+    // Raw
+    discord_manager.bot.on('raw', packet => {
+
+        console.log(packet);
+
+    });
+
     // Save Login
     if (typeof (Storage) !== "undefined") {
         if ($("#remember_token").is(":checked")) {
@@ -122,12 +129,17 @@ const startSystem = function () {
                             $("<li>", { class: "nav-item" }).append(
                                 $("<a>", { class: "nav-link", href: "#" }).text('Server List')
                             ).click(function () {
+                                $("#app_base").removeClass('d-none');
+                                $("#debug").addClass('d-none');
                                 discord_manager.server_list(1);
                             }),
 
                             // Debug List
                             $("<li>", { class: "nav-item" }).append(
-                                $("<a>", { class: "nav-link", href: "#" }).text('Debug')
+                                $("<a>", { class: "nav-link", href: "#" }).text('Debug').click(function () {
+                                    $("#app_base").addClass('d-none');
+                                    $("#debug").removeClass('d-none');
+                                }),
                             )
 
                         ),
@@ -148,7 +160,9 @@ const startSystem = function () {
 
                 ),
 
-                $("<div>", { id: "app_base" })
+                $("<div>", { id: "app_base", class: "d-none" }),
+
+                $("<div>", { id: "debug" })
 
             );
 
