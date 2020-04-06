@@ -9,7 +9,7 @@ discord_manager.server_list = function (page) {
     // Create Page
     $('#app_base').empty().append(
 
-        $("<h3>", {class: "text-center"}).text('Server List'),
+        $("<h3>", { class: "text-center" }).text('Server List'),
 
         $('<div>', { class: "table-responsive my-3" }).append(
             $("<table>", { class: "table table-striped m-0" }).append(
@@ -17,6 +17,9 @@ discord_manager.server_list = function (page) {
                 // Info
                 $("<thead>").append(
                     $("<tr>").append(
+
+                        // Count
+                        $("<th>").text("Count (" + items.length + ")"),
 
                         // Icon
                         $("<th>").text("Icon"),
@@ -58,6 +61,9 @@ discord_manager.server_list = function (page) {
                     tbody.append(
                         $("<tr>").append(
 
+                            // Count
+                            $("<td>").text(Number(i + 1)),
+
                             // Icon
                             $("<td>").append(
                                 $("<img>", { src: guild.iconURL(), alt: guild.name }).css('max-height', 150)
@@ -74,7 +80,7 @@ discord_manager.server_list = function (page) {
 
                         )
                     );
-                    
+
                 }
             }
 
