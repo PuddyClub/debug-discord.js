@@ -1,13 +1,44 @@
 discord_manager.server_list = function (page) {
 
+    // Prepare Pagination
     const items = Array.from(discord_manager.bot.guilds.cache.keys());
-    console.log(items);
-    items.push(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24);
 
-    const pagination = $("<ul>", { class: "pagination" });
+    const pagination = $("<ul>", { class: "pagination  justify-content-center m-0" });
+    const tbody = $('<tbody>');
 
-    $('#app_base').empty().append(pagination);
-    pagination.paging(1000, {
+    // Create Page
+    $('#app_base').empty().append(
+
+        $("<h3>").text('Server List'),
+
+        $('<div>', { class: "table-responsive my-3" }).append(
+            $("<table>", { class: "table table-striped m-0" }).append(
+
+                // Info
+                $("<thead>").append(
+                    $("<tr>").append(
+
+                        // Icon
+                        $("<th>").text("Icon"),
+
+                        // Name
+                        $("<th>").text("Name"),
+
+                        // Region
+                        $("<th>").text("Region"),
+
+                        // Users
+                        $("<th>").text("Users")
+
+                    )
+                ),
+
+                // TBody
+                tbody
+
+            )
+        ), pagination);
+    pagination.paging(items.length, {
 
         format: discord_manager.pagination.format,
         perpage: 20,
@@ -15,8 +46,37 @@ discord_manager.server_list = function (page) {
         page: page,
         onSelect: function (page) {
 
+            tbody.empty();
+
+            // Get List
             for (let i = this.slice[0]; i < this.slice[1]; i++) {
-                console.log(items[i]);
+                if (items[i]) {
+
+                    const guild = discord_manager.bot.guilds.cache.find(guild => guild.id === items[i]);
+
+                    // Create Itemm
+                    tbody.append(
+                        $("<tr>").append(
+
+                            // Icon
+                            $("<td>").append(
+                                $("<img>", { src: guild.iconURL(), alt: guild.name }).css('max-height', 150)
+                            ),
+
+                            // Name
+                            $("<td>").text(guild.name),
+
+                            // Region
+                            $("<td>").text(guild.region),
+
+                            // Users
+                            $("<td>").text(guild.memberCount)
+
+                        )
+                    );
+
+                    console.log(items[i]);
+                }
             }
 
         },
