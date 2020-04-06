@@ -1,3 +1,29 @@
+
+// Resize Window
+$(window).resize(function () {
+
+    try {
+
+        let chatheight = $(window).height();
+        let cssText = '';
+        let chatboxsizes = {
+            top_chat: Number($('#nav_top')[0].offsetHeight + 55)
+        };
+
+        // Top Bar Size
+        chatheight -= chatboxsizes.top_chat;
+
+        // Info Box
+        cssText += `#debug { height: ${chatheight}px !important; }`;
+
+        $("#cssBasePage").text(cssText);
+
+    } catch (err) {
+        $("#cssBasePage").text('');
+    }
+
+});
+
 const discord_manager = {
 
     scroll: {
@@ -104,7 +130,7 @@ const startSystem = function () {
         $(this).empty().removeClass('centerDiv').addClass('container').append(
 
             // Navbar
-            $("<nav>", { class: "navbar navbar-expand-lg navbar-light bg-light" }).append(
+            $("<nav>", { class: "navbar navbar-expand-lg navbar-light bg-light", id: "nav_top" }).append(
 
                 // Buttons
                 $("<a>", { class: "navbar-brand", href: "#" }).text("Debug Discord.JS"),
@@ -155,11 +181,14 @@ const startSystem = function () {
 
             $("<div>", { id: "app_base", class: "d-none" }),
 
-            $("<div>", { id: "debug" })
+            $("<div>", { id: "debug" }).css('height', 0)
 
         );
 
         $(this).fadeIn(500);
+
+        // Resize
+        $(window).trigger('resize');
 
     });
 
@@ -168,7 +197,12 @@ const startSystem = function () {
 
     // Ready
     discord_manager.bot.on('ready', (event) => {
+
         console.log(`Discord Logged in as ${discord_manager.bot.user.tag}!`);
+
+        // Resize
+        $(window).trigger('resize');
+
     });
 
     // Reconnect
@@ -190,9 +224,14 @@ const startSystem = function () {
     // Raw
     discord_manager.bot.on('raw', packet => {
 
-        discord_manager.scroll.action('#debug', '#debug > div',
-            $("<div>").text(JSON.stringify(packet))
-        );
+        // Resize
+        $(window).trigger('resize');
+
+        const jsonViewer = new JSONViewer();
+        const newRaw = $("<div>").append(jsonViewer.getContainer());
+        jsonViewer.showJSON(packet, -1, 1);
+
+        discord_manager.scroll.action('#debug', '#debug > div', newRaw);
 
     });
 
@@ -207,11 +246,21 @@ const startSystem = function () {
 
     // Login
     discord_manager.bot.login($("#discord_token").val()).then(function () {
+
         $.LoadingOverlay("hide");
+
+        // Resize
+        $(window).trigger('resize');
+
     }).catch(function (err) {
+
         $.LoadingOverlay("hide");
         $("#app").empty();
         alert(err.message);
+
+        // Resize
+        $(window).trigger('resize');
+
     });
 
 };
