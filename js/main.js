@@ -224,18 +224,20 @@ const startSystem = function () {
     });
 
     // Raw
-    discord_manager.bot.on('raw', packet => {
+    if (!$("#disable_debug").is(':checked')) {
+        discord_manager.bot.on('raw', packet => {
 
-        // Resize
-        $(window).trigger('resize');
+            // Resize
+            $(window).trigger('resize');
 
-        const jsonViewer = new JSONViewer();
-        const newRaw = $("<div>").append(jsonViewer.getContainer());
-        jsonViewer.showJSON(packet, -1, 1);
+            const jsonViewer = new JSONViewer();
+            const newRaw = $("<div>").append(jsonViewer.getContainer());
+            jsonViewer.showJSON(packet, -1, 1);
 
-        discord_manager.scroll.action('#debug', '#debug > div', newRaw);
+            discord_manager.scroll.action('#debug', '#debug > div', newRaw);
 
-    });
+        });
+    }
 
     // Save Login
     if (typeof (Storage) !== "undefined") {
