@@ -7,14 +7,14 @@ $(window).resize(function () {
         let chatheight = $(window).height();
         let cssText = '';
         let chatboxsizes = {
-            top_chat: Number($('#nav_top')[0].offsetHeight + 55)
+            top_chat: Number($('#nav_top')[0].offsetHeight + 32)
         };
 
         // Top Bar Size
         chatheight -= chatboxsizes.top_chat;
 
-        // Info Box
-        cssText += `#debug { height: ${chatheight}px !important; }`;
+        // Debug Box
+        cssText += `#debug, #app_base { height: ${chatheight}px !important; }`;
 
         $("#cssBasePage").text(cssText);
 
@@ -133,7 +133,7 @@ const startSystem = function () {
             $("<nav>", { class: "navbar navbar-expand-lg navbar-light bg-light", id: "nav_top" }).append(
 
                 // Buttons
-                $("<a>", { class: "navbar-brand", href: "#" }).text("Debug Discord.JS"),
+                $("<a>", { class: "navbar-brand", href: "#", id: "bot_name" }).text("Debug Discord.JS"),
                 $("<button>", { class: "navbar-toggler", type: "button", 'data-toggle': "collapse", 'data-target': "#navbarSupportedContent", 'aria-controls': "navbarSupportedContent", 'aria-expanded': false }).append(
                     $("<span>", { class: "navbar-toggler-icon" })
                 ),
@@ -199,6 +199,8 @@ const startSystem = function () {
     discord_manager.bot.on('ready', (event) => {
 
         console.log(`Discord Logged in as ${discord_manager.bot.user.tag}!`);
+
+        $("#bot_name").text(discord_manager.bot.user.tag);
 
         // Resize
         $(window).trigger('resize');

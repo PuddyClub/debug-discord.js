@@ -1,3 +1,7 @@
+body{
+    background-color: #c1c1c1;
+}
+
 .centerDiv {
     position: fixed;
     top: 50%;
@@ -7,6 +11,6 @@
     transform: translate(-50%, -50%);
 }
 
-#debug {
+#debug, #app_base {
     overflow-y: auto;
 }
