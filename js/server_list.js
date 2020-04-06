@@ -15,8 +15,6 @@ discord_manager.server_list = function (page) {
         page: page,
         onSelect: function (page) {
 
-            this.slice[0] = this.slice[0] + Number(page - 1);
-            this.slice[1] = this.slice[1] + Number(page - 1);
             for (let i = this.slice[0]; i < this.slice[1]; i++) {
                 console.log(items[i]);
             }

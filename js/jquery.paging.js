@@ -361,6 +361,9 @@
                     ]
                 };
 
+                data.slice[0] = data.slice[0] + Number(page - 1);
+                data.slice[1] = data.slice[1] + Number(page - 1);
+
                 buffer = "";
 
                 function buffer_append(opts, data, type) {
