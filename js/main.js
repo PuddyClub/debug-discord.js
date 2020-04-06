@@ -1,5 +1,42 @@
 const discord_manager = {
 
+    scroll: {
+
+        global1: function (item, item2) {
+
+            const messages = $(item)[0];
+            const shouldScroll = Math.ceil(messages.scrollTop + messages.clientHeight) >= messages.scrollHeight;
+
+            if ($(item2).length > 100) {
+                $(item2)
+                    .eq(0)
+                    .remove();
+            }
+
+            return shouldScroll;
+
+        },
+
+        global2: function (scrollposition, noScroll, item) {
+
+            if (scrollposition && !noScroll) {
+                $(item).scrollTop($(item)[0].scrollHeight);
+            }
+
+        },
+
+        action: function (item, item2, newItem) {
+
+            const scrollposition = discord_manager.scroll.global1(item, item2);
+
+            $(item).append(newItem);
+
+            discord_manager.scroll.global2(scrollposition, false, item);
+
+        }
+
+    },
+
     pagination: {
         format: "[ < nnncnnn > ]",
         onFormat: function (type) {
@@ -60,13 +97,78 @@ const startSystem = function () {
 
     // Load
     $.LoadingOverlay("show", { background: "rgba(0,0,0, 0.5)" });
+
+    // Start App
+    $("#app").fadeOut(500, function () {
+
+        $(this).empty().removeClass('centerDiv').addClass('container').append(
+
+            // Navbar
+            $("<nav>", { class: "navbar navbar-expand-lg navbar-light bg-light" }).append(
+
+                // Buttons
+                $("<a>", { class: "navbar-brand", href: "#" }).text("Debug Discord.JS"),
+                $("<button>", { class: "navbar-toggler", type: "button", 'data-toggle': "collapse", 'data-target': "#navbarSupportedContent", 'aria-controls': "navbarSupportedContent", 'aria-expanded': false }).append(
+                    $("<span>", { class: "navbar-toggler-icon" })
+                ),
+
+                // Menu
+                $("<div>", { class: "collapse navbar-collapse", id: "navbarSupportedContent" }).append(
+
+                    // Left
+                    $("<ul>", { class: "navbar-nav mr-auto mt-2 mt-lg-0" }).append(
+
+                        // Server List
+                        $("<li>", { class: "nav-item" }).append(
+                            $("<a>", { class: "nav-link", href: "#" }).text('Server List')
+                        ).click(function () {
+                            $("#app_base").removeClass('d-none');
+                            $("#debug").addClass('d-none');
+                            discord_manager.server_list(1);
+                        }),
+
+                        // Debug List
+                        $("<li>", { class: "nav-item" }).append(
+                            $("<a>", { class: "nav-link", href: "#" }).text('Debug').click(function () {
+                                $("#app_base").addClass('d-none');
+                                $("#debug").removeClass('d-none');
+                            }),
+                        )
+
+                    ),
+
+                    // Right
+                    $("<ul>", { class: "nav navbar-nav navbar-right ml-3" }).append(
+
+                        // Patreon
+                        $("<li>", { class: "nav-item" }).append(
+                            $("<a>", { class: "btn btn-info", target: "_blank", href: "https://www.patreon.com/JasminDreasond" }).append(
+                                $("<i>", { class: "fab fa-patreon" }), ' Patreon'
+                            )
+                        )
+
+                    )
+
+                )
+
+            ),
+
+            $("<div>", { id: "app_base", class: "d-none" }),
+
+            $("<div>", { id: "debug" })
+
+        );
+
+        $(this).fadeIn(500);
+
+    });
+
+
     discord_manager.bot = new Discord.Client({ autoReconnect: true });
 
     // Ready
     discord_manager.bot.on('ready', (event) => {
-
         console.log(`Discord Logged in as ${discord_manager.bot.user.tag}!`);
-
     });
 
     // Reconnect
@@ -88,7 +190,9 @@ const startSystem = function () {
     // Raw
     discord_manager.bot.on('raw', packet => {
 
-        console.log(packet);
+        discord_manager.scroll.action('#debug', '#debug > div',
+            $("<div>").text(JSON.stringify(packet))
+        );
 
     });
 
@@ -103,75 +207,10 @@ const startSystem = function () {
 
     // Login
     discord_manager.bot.login($("#discord_token").val()).then(function () {
-
-        // Start Page
         $.LoadingOverlay("hide");
-        $("#app").fadeOut(500, function () {
-
-            $(this).empty().removeClass('centerDiv').addClass('container').append(
-
-                // Navbar
-                $("<nav>", { class: "navbar navbar-expand-lg navbar-light bg-light" }).append(
-
-                    // Buttons
-                    $("<a>", { class: "navbar-brand", href: "#" }).text("Debug Discord.JS"),
-                    $("<button>", { class: "navbar-toggler", type: "button", 'data-toggle': "collapse", 'data-target': "#navbarSupportedContent", 'aria-controls': "navbarSupportedContent", 'aria-expanded': false }).append(
-                        $("<span>", { class: "navbar-toggler-icon" })
-                    ),
-
-                    // Menu
-                    $("<div>", { class: "collapse navbar-collapse", id: "navbarSupportedContent" }).append(
-
-                        // Left
-                        $("<ul>", { class: "navbar-nav mr-auto mt-2 mt-lg-0" }).append(
-
-                            // Server List
-                            $("<li>", { class: "nav-item" }).append(
-                                $("<a>", { class: "nav-link", href: "#" }).text('Server List')
-                            ).click(function () {
-                                $("#app_base").removeClass('d-none');
-                                $("#debug").addClass('d-none');
-                                discord_manager.server_list(1);
-                            }),
-
-                            // Debug List
-                            $("<li>", { class: "nav-item" }).append(
-                                $("<a>", { class: "nav-link", href: "#" }).text('Debug').click(function () {
-                                    $("#app_base").addClass('d-none');
-                                    $("#debug").removeClass('d-none');
-                                }),
-                            )
-
-                        ),
-
-                        // Right
-                        $("<ul>", { class: "nav navbar-nav navbar-right ml-3" }).append(
-
-                            // Patreon
-                            $("<li>", { class: "nav-item" }).append(
-                                $("<a>", { class: "btn btn-info", target: "_blank", href: "https://www.patreon.com/JasminDreasond" }).append(
-                                    $("<i>", { class: "fab fa-patreon" }), ' Patreon'
-                                )
-                            )
-
-                        )
-
-                    )
-
-                ),
-
-                $("<div>", { id: "app_base", class: "d-none" }),
-
-                $("<div>", { id: "debug" })
-
-            );
-
-            $(this).fadeIn(500);
-
-        });
-
     }).catch(function (err) {
         $.LoadingOverlay("hide");
+        $("#app").empty();
         alert(err.message);
     });
 
