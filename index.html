@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{global.lang.lang}}">
+
+    <head>
+
+        <title>Discord.JS</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha256-OUFW7hFO0/r5aEGTQOz9F/aXQOt+TwqI1Z4fbVvww04=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-loading-overlay/2.1.7/loadingoverlay.min.js" integrity="sha256-S4gG40EfG9fszyLcPdnHxrARVtHCTLYxq3Lz4h5H93E=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="./css/main.css"/>
+        <script src="./js/discord.js"></script>
+        <script src="./js/main.js"></script>
+
+    </head>
+
+    <body>
+
+        <div class="centerDiv py-3 bg-white" id="app">
+
+            <center>
+                <h2>Debug Discord.JS</h2>
+            </center>
+
+            <div class="form-group">
+                <label for="discord_token">Bot Token</label>
+                <input type="password" class="form-control" id="discord_token" aria-describedby="token_help" placeholder="Insert the Discord Token">
+                <small id="token_help" class="form-text text-muted">Your Discord bot's Token. All execution of this software will be done on your computer. No data will be transferred to third parties.</small>
+            </div>
+
+            <center>
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="remember_token">
+                    <label class="form-check-label" for="remember_token">Remember Token</label>
+                </div>
+                <button type="submit" id="start_discord" class="btn btn-primary">Login</button>
+
+            </center>
+
+        </div>
+
+    </body>
+
+</html>
